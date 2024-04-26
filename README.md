@@ -71,7 +71,7 @@ Dấu `.` sẽ cho docker biết Dockerfile hiện tại đang ở đâu. Trong 
 
 ## Khởi chạy container
 
-Để chạy một container ta sẽ sử dụng lệnh `docker build`
+Để chạy một container ta sẽ sử dụng lệnh `docker run`
 
 ```base
     docker run -dp 127.0.0.1:8501:8501 youtube-downloader
