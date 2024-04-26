@@ -34,21 +34,25 @@ Dockerfile chỉ đơn giản là một tệp dựa trên văn bản không có 
 Tạo một file có tên là `Dockerfile` và chắc chắc rằng nó không có phần mở rộng. Mở nó lên và thêm đoạn code này vào
 
 ```dockerfile
-    FROM python:3.12
+    FROM python:3.12-alpine
     WORKDIR /app
-    COPY . .
-    RUN pip install -r requirements.txt
     EXPOSE 8501
+    COPY requirements.txt .
+    RUN pip install -r requirements.txt
+    COPY app.py .
     CMD ["streamlit", "run", "app.py"]
 ```
 
 Trong đó
-> - `FROM python:3.12`: Sử dụng python:3.12 làm base image
+> - `FROM python:3.12-alpine`: Sử dụng python:3.12-alpine làm base image
 > - `WORKDIR /app`: Thiết lập thư mục làm trong container
-> - `COPY . .`: Copy tất cả file từ thư mục hiện tại vào trong container
-> - `RUN pip install -r requirements.txt`: Cài đặt các thư viện cần thiết
 > - `EXPOSE 8501`: Mở localhost với cổng là 8501
+> - `COPY requirements.txt .`: Copy file requirements.txt trong container
+> - `RUN pip install -r requirements.txt`: Cài đặt các thư viện cần thiết
+> - `COPY app.py .`: Copy mã mã nguồn vào trong container
 > - `CMD ["streamlit", "run", "app.py"]`: Dùng để chạy ứng dụng web khi container được khởi động
+
+## Build một image
 
 Để build một image, ta dùng lệnh: 
 
@@ -58,13 +62,12 @@ Trong đó
 
 > ⚠️: đừng quên dấu chấm ở cuối
 
-## Build một image
 
 Lệnh `docker build` sẽ sử dụng Dockerfile để build một image mới
 
-Cờ `-t`: tag. Có thể hiểu đây là tên của image và có thể tham chiếu đến nó khi chạy một container
+Cờ `-t`: `tag`. Có thể hiểu đây là tên của image và có thể tham chiếu đến nó khi chạy một container
 
-Dấu `.` sẽ cho docker biết Dockerfile hiện tại đang ở đâu. Trong ví dụ này nó ở trong thư mục hiện tại
+Dấu `.` sẽ cho docker biết Dockerfile hiện tại đang ở đâu. Trong ví dụ này nó ở trong thư mục gốc
 
 ## Khởi chạy container
 
@@ -74,17 +77,17 @@ Dấu `.` sẽ cho docker biết Dockerfile hiện tại đang ở đâu. Trong 
     docker run -dp 127.0.0.1:8501:8501 youtube-downloader
 ```
 
-Đi đến trình duyệt và xem thành quả [localhost:8501](http://localhost:8501/)
-
 > - Cờ `d` hay `--detach`: cho phép container của bạn chạy ở chế độ nền. Bạn có thể kiểm tra container của bạn bằng lệnh `docker ps`
 > - Cờ `p` hay `--publish`: tạo ánh xạ giữa localhost và container. Nếu không có sự ánh xạ này bạn không thể nào truy cập được ứng dụng từ máy của bạn
+
+Đi đến trình duyệt và xem thành quả [localhost:8501](http://localhost:8501/)
 
 ## Hướng dẫn nhanh
 
 Dockerfile này đã được upload lên [hub.docker.com](https://hub.docker.com/). Bạn có thể pull về bằng: 
 
 ```bash
-    docker pull lockman04/youtube-downloader
+    docker pull lockman04/youtube-downloader:latest
 ```
 
 ## Thanks
