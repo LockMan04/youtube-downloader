@@ -46,7 +46,7 @@ Tạo một file có tên là `Dockerfile` và chắc chắc rằng nó không c
 Trong đó
 > - `FROM python:3.12-alpine`: Sử dụng python:3.12-alpine làm base image
 > - `WORKDIR /app`: Thiết lập thư mục làm trong container
-> - `EXPOSE 8501`: Mở localhost với cổng là 8501
+> - `EXPOSE 8501`: Cấu hình cổng cho image là 8501
 > - `COPY requirements.txt .`: Copy file requirements.txt trong container
 > - `RUN pip install -r requirements.txt`: Cài đặt các thư viện cần thiết
 > - `COPY app.py .`: Copy mã mã nguồn vào trong container
