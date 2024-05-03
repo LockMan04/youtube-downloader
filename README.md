@@ -39,7 +39,7 @@ Tạo một file có tên là `Dockerfile` và chắc chắc rằng nó không c
     EXPOSE 8501
     COPY requirements.txt .
     RUN pip install -r requirements.txt
-    COPY app.py .
+    COPY app.py . 
     CMD ["streamlit", "run", "app.py"]
 ```
 
@@ -89,6 +89,72 @@ Dockerfile này đã được upload lên [hub.docker.com](https://hub.docker.co
 ```bash
     docker pull lockman04/youtube-downloader:latest
 ```
+
+## Tùy chọn lệch `docker run`
+Đây là một số tùy chọn và tham số phổ biến:
+1. Tùy chọn `-d`: Cho phép container chạy ở chế độ nền (daemon):
+```bash 
+docker run -d youtube-downloader
+```
+2. Tùy chọn `--name`: Đặt tên cho container:
+```bash
+docker run --name my-container youtube-downloader
+```
+3. Tùy chọn `-p`: ánh xạ cổng từ host vào container:
+```bash 
+docker run -p 8080:80 nginx 
+```
+4. Tùy chọn `e`: Đặt biến môi trường trong container: 
+```bash 
+docker run -e ENV_VAR=value youtube-downloader
+```
+5. Tùy chọn `-it`: Mở terminal sau khi container được khởi chạy:
+```bash
+docker run -it help
+```
+6. Tùy chọn `--rm`: Tự động xóa container khi kết thúc:
+```bash
+docker run --rm youtube-downloader
+```
+7. ...
+
+
+## Bind Mount
+![](https://docs.docker.com/storage/images/types-of-mounts-bind.webp?w=450&h=300)
+
+Để bắt đầu hãy chạy lệnh dưới đây:
+```bash 
+docker run -it --mount type=bind,src="$(pwd)",target=/src ubuntu bash
+```
+
+Tùy chọn `--mount type=bind` sẽ yêu cầu Docker tạo một bind mount. `src` là thư mục làm hiện tại trên host là ở đâu và `target` là nơi thư mục đó xuất hiện bên trong container
+
+Sau khi chạy, Docker sẽ bắt đầu một phiên `bash` tương tác trong thư mục gốc của container
+
+![](https://raw.githubusercontent.com/LockMan04/Stored/main/youtube-downloader/Screenshot4.png)
+
+Di chuyển vào thư mục `src`. Có thể thấy rằng nội dung của thư mục này sẽ giống như thư mục `youtube-downloader` trên host
+
+![](https://raw.githubusercontent.com/LockMan04/Stored/main/youtube-downloader/Screenshot5.png)
+
+Bây giờ hãy thử tạo một file mới có tên là `myfile.txt`
+```bash
+    touch myfile.txt
+```
+
+![](https://raw.githubusercontent.com/LockMan04/Stored/main/youtube-downloader/Screenshot6.png)
+
+Mở mã nguồn của bạn quan sát và thấy rằng file `myfile.txt` cũng nằm ở trong thư mực
+
+![](https://raw.githubusercontent.com/LockMan04/Stored/main/youtube-downloader/Screenshot7.png)
+
+Từ máy của bạn, hãy xóa file `myfile.txt`
+
+Khi `ls` một lần nữa trong container, sẽ thấy `myfile.txt` sẽ biến mất
+
+![](https://raw.githubusercontent.com/LockMan04/Stored/main/youtube-downloader/Screenshot8.png)
+
+> Dùng `Crl` + `D` để dừng phiên container
 
 ## Thanks
 
